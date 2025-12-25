@@ -1,94 +1,67 @@
-# command line, text based, simple Bank. or ATM machine.
-# welcome.
-# choose the language.
-# menu: Check Balance, Withdraw, Deposit, Exit
-print("WELLCOME TO MZ BANK!")
-
 def main():
-    user_language()
-    main_menu()
-
-balance = 0.00
+    """Main function to run the banking application."""
+    print("WELCOME TO MZ BANK!")
     
-def user_language():
-    while True: # finding user's preferable language.
-        print("please choose a language?".title())
-        print("1: English", "2: French", "3: Arabic", sep=" " * 3)
-        language = input("language: ".title())
-        if language == "1" or language == "2" or language == "3":
-             break
-        else:
-            print("invalid language number!".title())
-            continue
-
-def main_menu():
-    global balance     # this reminds that any variable inside is reffered to the global one.
+    # The balance is managed here, in the main scope.
+    balance = 0.00
+    
+    # The main menu loop
     while True:
-        print()
-        print("********", "MAIN MENU", "********")
-        print()
-        print("Please choose your Action".title())
-        print()
-        print("Check Balance   1")
-        print("Withdraw        2")
-        print("Deposit         3")
-        print("Exit            4")
-        action = int(input("Action: "))
+        print("\n********** MAIN MENU **********")
+        print("\n1: Check Balance")
+        print("2: Deposit")
+        print("3: Withdraw")
+        print("4: Exit")
         
-        if action == 1:        # Balance
-            print()
-            print("Balance:", f"{balance:.2f}")
-
-            continue
-        elif action == 2:      # Withdrawal actiod
-            while True:
-                print()
-                withdrawal = float(input("Withdrawal Amount: "))   # Ask for withdrawal Amount
-                withdrawal = round(withdrawal, 2)
-                if withdrawal <= 0.00:                   # if the number in invalid
-                    print()
-                    print("invalid Withdrawal amount.".title())
-                    continue
-                elif withdrawal > balance:      # if we don't have enough balance for withdrawal
-                    print()
-                    print("Insufficient Funds".title())
-                    print()
-                    print("Main menu   1".title())
-                    print("Withdrawal  2".title())
-                    print()
-                    menu_withdrawal = int(input("Action: "))
-                    if menu_withdrawal == 1:
-                        break
-                    elif menu_withdrawal == 2:
-                        continue
-                    else:
-                        print("Invalid Action!")
-                        continue
-                else:
-                    print()
-                    print("Successful withdrawal.".title())
-                    balance = balance - withdrawal
-                    break
-        elif action == 3:        
-            while True:
-                print()
-                deposit = float(input("deposit Amount: ".title()))     # Ask for Deposit Amount
-                deposit = round(deposit, 2)
-                if deposit <= 0.00:
-                    print()
-                    print("invalid deposit amount.".title())
-                    continue
-                else:
-                    print()
-                    print("Successful deposit.".title())
-                    balance = deposit + balance
-                    break
-        elif action == 4: 
-            print()
-            print("******Have a Good day******")
+        choice = input("Action: ")
+        
+        if choice == "1":
+            # Just show the balance. No change is needed.
+            check_balance(balance)
+        elif choice == "2":
+            # This function will return the NEW balance, so we update it here.
+            balance = deposit(balance)
+        elif choice == "3":
+            # This function will also return the NEW balance.
+            balance = withdraw(balance)
+        elif choice == "4":
+            print("\n*****Have a Good day*****")
             break
         else:
-            print("invalid Action number!".title())
-            continue
+            print("\nInvalid Action number! Please choose a number from 1 to 4.".title())
+
+def check_balance(current_balance):
+    # Displays the current balance.
+    print(f"\nBalance: ${current_balance:.2f}")
+
+def deposit(current_balance):
+    # Handles the deposit logic and returns the new balance.
+    print() # Add a space for readability
+    amount = float(input("Deposit Amount: "))
     
+    if amount <= 0:
+        print("\nInvalid deposit amount. Must be a positive number.".title())
+        return current_balance # Return the original balance without changing it
+    else:
+        new_balance = current_balance + amount
+        print(f"\nSuccessful deposit. Your new balance is ${new_balance:.2f}")
+        return new_balance # Return the calculated new balance
+
+def withdraw(current_balance):
+    # Handles the withdrawal logic and returns the new balance.
+    print() # Add a space for readability
+    amount = float(input("Withdrawal Amount: "))
+    
+    if amount <= 0:
+        print("\nInvalid withdrawal amount. Must be a positive number.".title())
+        return current_balance # Return original balance
+    elif amount > current_balance:
+        print("\nInsufficient Funds".title())
+        return current_balance # Return original balance
+    else:
+        new_balance = current_balance - amount
+        print(f"\nSuccessful withdrawal. Your new balance is ${new_balance:.2f}")
+        return new_balance # Return the calculated new balance
+
+# Call the main function to start the program
 main()
