@@ -1,4 +1,4 @@
-# a calculator for simple operations.
+//nice# a calculator for simple operations.
 
 while True:
     x = float(input("first number: ").strip())    
